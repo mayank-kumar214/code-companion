@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimpleCalculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <!-- Calculator container -->
+    <div class="calculator">
+        <!-- Display area -->
+        <div id="display" class="display" aria-live="polite"></div>
+        <!-- Buttons grid -->
+        <div class="buttons">
+            <!-- Row 1: 7 8 9 -->
+            <button class="btn num" data-key="7">7</button>
+            <button class="btn num" data-key="8">8</button>
+            <button class="btn num" data-key="9">9</button>
+            <!-- Row 2: 4 5 6 -->
+            <button class="btn num" data-key="4">4</button>
+            <button class="btn num" data-key="5">5</button>
+            <button class="btn num" data-key="6">6</button>
+            <!-- Row 3: 1 2 3 -->
+            <button class="btn num" data-key="1">1</button>
+            <button class="btn num" data-key="2">2</button>
+            <button class="btn num" data-key="3">3</button>
+            <!-- Row 4: 0 . -->
+            <button class="btn num" data-key="0">0</button>
+            <button class="btn num" data-key=".">.</button>
+            <!-- Row 5: Operators -->
+            <button class="btn op" data-key="+">+</button>
+            <button class="btn op" data-key="-">-</button>
+            <button class="btn op" data-key="*">×</button>
+            <button class="btn op" data-key="/">÷</button>
+            <!-- Row 6: Equals, Clear, Backspace -->
+            <button class="btn equals" data-key="=">=</button>
+            <button class="btn clear" data-key="c">C</button>
+            <button class="btn backspace" data-key="Backspace">←</button>
+        </div>
+    </div>
+</body>
+</html>

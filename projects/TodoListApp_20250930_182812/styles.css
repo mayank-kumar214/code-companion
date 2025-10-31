@@ -1,0 +1,275 @@
+/*
+  Todo List App - Stylesheet
+  Implements root variables, layout, component styling, and responsive design.
+*/
+
+/* Root variables for colors, fonts, and spacing */
+:root {
+  /* Colors */
+  --color-bg: #f9fafb;
+  --color-surface: #ffffff;
+  --color-primary: #2d8cf0;
+  --color-primary-dark: #1b6dbb;
+  --color-muted: #6b7280;
+  --color-border: #e5e7eb;
+  --color-danger: #ef4444;
+
+  /* Font families */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-mono: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+
+  /* Font sizes */
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+}
+
+/* Global resets */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: #111827; /* dark text */
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+}
+
+/* Todo App container */
+.todo-app {
+  width: 100%;
+  max-width: 600px;
+  background-color: var(--color-surface);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.todo-app header h1 {
+  font-size: var(--text-xl);
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-primary);
+}
+
+/* Input Section */
+.input-section {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+#new-task-input {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--text-base);
+  border: 1px solid var(--color-border);
+  border-radius: 0.25rem;
+  transition: border-color 0.2s ease;
+}
+
+#new-task-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(45, 140, 240, 0.2);
+}
+
+#add-task-btn {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background-color: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 0.25rem;
+  font-size: var(--text-base);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#add-task-btn:hover {
+  background-color: var(--color-primary-dark);
+}
+
+/* Task List */
+.task-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.25rem;
+}
+
+/* Checkbox custom styling */
+.task-item input[type="checkbox"] {
+  appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid var(--color-muted);
+  border-radius: 0.25rem;
+  margin-right: var(--spacing-sm);
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.task-item input[type="checkbox"]:checked {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.task-item input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 6px;
+  width: 4px;
+  height: 8px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.task-item label {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  font-size: var(--text-base);
+  cursor: pointer;
+}
+
+/* Completed state */
+.task-item.completed label span {
+  text-decoration: line-through;
+  color: var(--color-muted);
+}
+
+/* Edit input */
+.task-item .edit-input {
+  flex: 1;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--text-base);
+  border: 1px solid var(--color-border);
+  border-radius: 0.25rem;
+}
+
+/* Delete button */
+.task-item .delete-btn {
+  background: none;
+  border: none;
+  color: var(--color-muted);
+  cursor: pointer;
+  font-size: 1.25rem;
+  margin-left: var(--spacing-sm);
+  transition: color 0.2s ease;
+}
+
+.task-item .delete-btn:hover {
+  color: var(--color-danger);
+}
+
+/* Footer Filters */
+footer .filters {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.filter-btn {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-size: var(--text-base);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+  background-color: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+
+/* Clear completed button */
+#clear-completed-btn {
+  display: block;
+  margin: 0 auto;
+  padding: var(--spacing-xs) var(--spacing-lg);
+  background-color: var(--color-muted);
+  color: #fff;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-size: var(--text-base);
+  transition: background-color 0.2s ease;
+}
+
+#clear-completed-btn:hover {
+  background-color: #4b5563; /* slightly darker */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .todo-app {
+    padding: var(--spacing-md);
+  }
+
+  .input-section {
+    flex-direction: column;
+  }
+
+  #add-task-btn {
+    width: 100%;
+    margin-top: var(--spacing-xs);
+  }
+
+  .task-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .task-item .delete-btn {
+    align-self: flex-end;
+    margin-top: var(--spacing-xs);
+  }
+
+  footer .filters {
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    flex: 1 1 30%;
+    text-align: center;
+  }
+}

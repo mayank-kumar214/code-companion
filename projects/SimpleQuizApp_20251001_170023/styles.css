@@ -1,0 +1,157 @@
+/* Root variables for colors, font sizes, and spacing */
+:root {
+  /* Colors */
+  --color-primary: #2563eb; /* blue-600 */
+  --color-primary-dark: #1d4ed8; /* blue-700 */
+  --color-success: #16a34a; /* green-600 */
+  --color-success-dark: #15803d; /* green-700 */
+  --color-danger: #dc2626; /* red-600 */
+  --color-danger-dark: #b91c1c; /* red-700 */
+  --color-white: #ffffff;
+  --color-bg: #f9fafb; /* light gray */
+  --color-text: #111827; /* gray-900 */
+
+  /* Font sizes */
+  --text-xs: 0.75rem;   /* 12px */
+  --text-sm: 0.875rem;  /* 14px */
+  --text-base: 1rem;    /* 16px */
+  --text-lg: 1.125rem;  /* 18px */
+  --text-xl: 1.25rem;   /* 20px */
+  --text-2xl: 1.5rem;   /* 24px */
+  --text-3xl: 1.875rem; /* 30px */
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;   /* 4px */
+  --spacing-sm: 0.5rem;    /* 8px */
+  --spacing-md: 1rem;      /* 16px */
+  --spacing-lg: 1.5rem;    /* 24px */
+  --spacing-xl: 2rem;      /* 32px */
+}
+
+/* Utility class to hide elements */
+.hidden {
+  display: none !important;
+}
+
+/* Screen container – centered flex column */
+.screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  text-align: center;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Base button styling */
+.btn {
+  display: inline-block;
+  width: 100%;
+  max-width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--text-base);
+  font-weight: 500;
+  text-align: center;
+  color: var(--color-white);
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 0.375rem; /* 6px */
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn:hover,
+.btn:focus {
+  background-color: var(--color-primary-dark);
+  outline: none;
+}
+
+/* Success and danger button modifiers (used via additional classes in HTML) */
+.btn.bg-green-500 {
+  background-color: var(--color-success);
+}
+.btn.bg-green-500:hover {
+  background-color: var(--color-success-dark);
+}
+
+.btn.bg-red-500 {
+  background-color: var(--color-danger);
+}
+.btn.bg-red-500:hover {
+  background-color: var(--color-danger-dark);
+}
+
+/* Answer list styling */
+.answer-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.answer-list li {
+  margin-bottom: var(--spacing-sm);
+}
+
+.answer-list button {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--text-base);
+  background-color: var(--color-white);
+  color: var(--color-text);
+  border: 2px solid var(--color-primary);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.answer-list button:hover,
+.answer-list button:focus {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border-color: var(--color-primary-dark);
+}
+
+/* Header styling – keep Tailwind defaults but ensure contrast */
+header {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+/* Responsive adjustments */
+@media (min-width: 480px) {
+  :root {
+    --text-base: 1.125rem;   /* 18px */
+    --text-lg: 1.25rem;      /* 20px */
+    --text-xl: 1.5rem;       /* 24px */
+  }
+
+  .screen {
+    padding: var(--spacing-xl);
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --text-base: 1.25rem;    /* 20px */
+    --text-lg: 1.5rem;       /* 24px */
+    --text-xl: 1.875rem;    /* 30px */
+  }
+
+  .btn {
+    max-width: 300px;
+  }
+
+  .answer-list button {
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
