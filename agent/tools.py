@@ -6,10 +6,12 @@ from langchain_core.tools import tool
 
 PROJECT_ROOT = pathlib.Path.cwd() / "generated_project"
 
+
 def set_project_root(path: str):
     global PROJECT_ROOT
     PROJECT_ROOT = pathlib.Path(path)
     PROJECT_ROOT.mkdir(parents=True, exist_ok=True)
+
 
 def safe_path_for_project(path: str) -> pathlib.Path:
     p = (PROJECT_ROOT / path).resolve()
@@ -20,6 +22,15 @@ def safe_path_for_project(path: str) -> pathlib.Path:
 
 @tool
 def write_file(path: str, content: str) -> str:
+    """Write content to a file at the specified path within the project directory.
+
+    Args:
+        path: Relative path to the file within the project root
+        content: Content to write to the file
+
+    Returns:
+        Confirmation message with the file path
+    """
     p = safe_path_for_project(path)
     p.parent.mkdir(parents=True, exist_ok=True)
     with open(p, "w", encoding="utf-8") as f:
@@ -29,6 +40,14 @@ def write_file(path: str, content: str) -> str:
 
 @tool
 def read_file(path: str) -> str:
+    """Read and return the content of a file at the specified path.
+
+    Args:
+        path: Relative path to the file within the project root
+
+    Returns:
+        The content of the file, or empty string if file doesn't exist
+    """
     p = safe_path_for_project(path)
     if not p.exists():
         return ""
@@ -38,11 +57,21 @@ def read_file(path: str) -> str:
 
 @tool
 def get_current_directory() -> str:
+    """Get the current project root directory path.
+
+    Returns:
+        The absolute path to the project root directory
+    """
     return str(PROJECT_ROOT)
 
 
 @tool
 def list_files() -> str:
+    """List all files in the project directory recursively.
+
+    Returns:
+        A newline-separated list of all file paths relative to the project root
+    """
     p = PROJECT_ROOT
     if not p.is_dir():
         return f"ERROR: Project directory '{p}' does not exist."
@@ -50,8 +79,19 @@ def list_files() -> str:
     files = [str(f.relative_to(p)) for f in p.glob("**/*") if f.is_file()]
     return "\n".join(files) if files else "The project directory is empty."
 
+
 @tool
 def run_cmd(cmd: str, cwd: str = None, timeout: int = 30) -> Tuple[int, str, str]:
+    """Execute a shell command in the project directory.
+
+    Args:
+        cmd: The shell command to execute
+        cwd: Working directory for the command (relative to project root)
+        timeout: Maximum time in seconds to wait for command completion
+
+    Returns:
+        A tuple of (return_code, stdout, stderr)
+    """
     cwd_dir = safe_path_for_project(cwd) if cwd else PROJECT_ROOT
     res = subprocess.run(cmd, shell=True, cwd=str(cwd_dir), capture_output=True, text=True, timeout=timeout)
     return res.returncode, res.stdout, res.stderr

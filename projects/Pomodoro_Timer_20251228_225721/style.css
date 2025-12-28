@@ -1,0 +1,118 @@
+:root {
+  --primary-color: #ff6b6b; /* main accent */
+  --bg-color: #f9f9f9;      /* app background */
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Global reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+  background-color: #ffffff;
+  color: #333;
+}
+
+/* Pomodoro app layout */
+.pomodoro-app {
+  display: grid;
+  grid-template-rows: auto auto auto auto;
+  gap: 1.5rem;
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: var(--bg-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.pomodoro-header {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.timer-display {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 3rem;
+  text-align: center;
+  background-color: #eaeaea;
+  padding: 0.5rem 0;
+  border-radius: 4px;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 0.5rem;
+}
+
+.control-btn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: var(--primary-color);
+  color: #fff;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  font-size: 1rem;
+}
+
+.control-btn:hover:not(:disabled) {
+  background-color: #e05555; /* slightly darker shade */
+}
+
+/* Modifier classes – can be used for future color tweaks */
+.btn-start {}
+.btn-pause {}
+.btn-reset {}
+
+.settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.setting-label {
+  font-weight: 500;
+}
+
+.setting-input {
+  width: 60px;
+  padding: 0.3rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+/* Disabled button state */
+.control-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .pomodoro-app {
+    max-width: 90%;
+  }
+
+  .pomodoro-header {
+    font-size: 1.3rem;
+  }
+
+  .timer-display {
+    font-size: 2.5rem;
+  }
+
+  .control-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}

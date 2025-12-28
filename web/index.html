@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeCompanion</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <div class="main-container">
+        <header>
+            <div class="brand">
+                <i class="fa-solid fa-robot"></i> CodeCompanion
+            </div>
+        </header>
+
+        <section class="hero-section">
+            <h1>What shall we build?</h1>
+            <div class="input-wrapper">
+                <textarea id="promptInput" placeholder="Describe your app..."></textarea>
+                <div class="input-actions">
+                    <button id="generateBtn" onclick="generateProject()">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Generate
+                    </button>
+                </div>
+            </div>
+
+            <div id="loader" class="hidden">
+                <span class="spinner"></span>
+                <span id="btnText">Architecting your solution...</span>
+            </div>
+
+            <div id="errorArea" class="hidden">
+                <p id="errorMessage"></p>
+            </div>
+        </section>
+
+        <section class="gallery-section">
+            <div class="gallery-header">
+                <h2>Generated Projects</h2>
+            </div>
+
+            <div class="cards-container" id="projectCards">
+                <div class="loading-card">Loading projects...</div>
+            </div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

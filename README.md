@@ -19,13 +19,17 @@ A powerful AI-powered engineering project generator built with LangGraph and Lan
 - **Recursive Processing** - Configurable recursion limits for complex project generation
 
 ### User Experience
+- **Modern Web Interface** - Beautiful GUI for project generation with real-time progress tracking
 - **Interactive CLI Interface** - Simple command-line interaction for project generation
-- **Real-time Progress** - Verbose logging and debug information for transparency
+- **Project History Gallery** - Browse and manage all previously generated projects
+- **One-Click File Explorer** - Open generated projects directly in your system file explorer
+- **Real-time Progress** - Live status updates and verbose logging for transparency
 - **Flexible Input** - Natural language project descriptions with intelligent interpretation
 - **Safe Operations** - Sandboxed file operations within designated project directories
 
 ## 🛠️ Technologies Used
 
+### Backend & AI
 - **Python 3.11+**: Core language with modern features
 - **LangGraph 0.6.3**: Advanced workflow and state management framework
 - **LangChain 0.3.27**: AI application development framework
@@ -35,6 +39,12 @@ A powerful AI-powered engineering project generator built with LangGraph and Lan
 - **Pydantic 2.11.7**: Data validation and type safety
 - **Python-dotenv 1.1.1**: Environment variable management
 - **Pip 25.2+**: Python package installer
+
+### Web Interface
+- **FastAPI 0.122.0+**: Modern, high-performance web framework for the API
+- **Uvicorn 0.38.0+**: Lightning-fast ASGI server for serving the web interface
+- **HTML/CSS/JavaScript**: Frontend technologies for the interactive GUI
+- **CORS Middleware**: Cross-origin resource sharing for API access
 
 ## 🎯 Technical Architecture
 
@@ -104,10 +114,16 @@ CodeCompanion/
 ├── projects/             # Generated projects output directory (auto-created)
 │   ├── Colorful_Memory_Match_Game_20251031_121342/
 │   ├── Modern_Tic_Tac_Toe_20251031_094111/
-│   ├── SimpleCalculator_20250928_203507/
+│   ├── Classic_Snake_Game_20251105_153344/
+│   ├── Simple_Calculator_20251129_021846/
 │   ├── SimpleQuizApp_20251001_170023/
 │   └── TodoListApp_20250930_182812/
+├── web/                  # Web interface frontend files
+│   ├── index.html        # Main GUI page with project generation interface
+│   ├── style.css         # Modern styling for the web interface
+│   └── app.js            # JavaScript for API communication and UI interactions
 ├── main.py               # CLI entry point and argument parser
+├── server.py             # FastAPI server for web interface and API endpoints
 ├── pyproject.toml        # Project configuration and dependencies (uv package manager)
 ├── .env                  # Environment variables (API keys, config) - create this file
 ├── .gitignore            # Git ignore patterns (optional)
@@ -120,6 +136,7 @@ CodeCompanion/
 - **Python 3.11 or higher** (required for modern type hints and features)
 - **Groq API Key** (get one free at [groq.com](https://groq.com))
 - **Internet connection** (for API calls)
+- **Modern web browser** (Chrome, Firefox, Safari, or Edge - for GUI mode)
 - **Terminal/Command Prompt** (for running the application)
 
 ### Installation & Setup
@@ -136,7 +153,7 @@ CodeCompanion/
    uv sync
    
    # Or manually install dependencies with pip
-   pip install groq>=0.31.0 langchain>=0.3.27 langchain-core>=0.3.72 langchain-groq>=0.3.7 langgraph>=0.6.3 pydantic>=2.11.7 python-dotenv>=1.1.1
+   pip install fastapi>=0.122.0 uvicorn>=0.38.0 groq>=0.31.0 langchain>=0.3.27 langchain-core>=0.3.72 langchain-groq>=0.3.7 langgraph>=0.6.3 pydantic>=2.11.7 python-dotenv>=1.1.1
    ```
 
 3. **Configure environment variables**
@@ -146,6 +163,17 @@ CodeCompanion/
    ```
 
 4. **Run the application**
+   
+   **Option A: Web Interface (Recommended)**
+   ```bash
+   # Start the FastAPI server
+   python server.py
+   
+   # Open your browser and navigate to:
+   # http://127.0.0.1:8000/static/index.html
+   ```
+   
+   **Option B: Command Line Interface**
    ```bash
    # Basic usage
    python main.py
@@ -156,6 +184,15 @@ CodeCompanion/
    ```
 
 5. **Start generating projects!**
+   
+   **Via Web Interface:**
+   - Enter your project description in the text area
+   - Adjust recursion limit if needed (default: 100)
+   - Click "Generate Project" and watch the magic happen!
+   - View project history in the gallery section
+   - Open generated projects directly in your file explorer
+   
+   **Via CLI:**
    ```
    Enter your project prompt: Build a colorful modern todo app in HTML CSS and JS
    ```
@@ -164,7 +201,18 @@ CodeCompanion/
 
 ## 🎮 How to Use
 
-### Basic Usage
+### Web Interface Usage (Recommended)
+1. **Start the server** → Run `python server.py`
+2. **Open the GUI** → Navigate to `http://127.0.0.1:8000/static/index.html` in your browser
+3. **Enter project description** → Type what you want to build in the text area
+4. **Configure settings** → Adjust recursion limit if needed (default: 100)
+5. **Generate project** → Click the "Generate Project" button
+6. **Watch real-time progress** → See status updates as agents work
+7. **Access your project** → Click "Open Project Folder" when complete
+8. **Browse history** → View all previously generated projects in the gallery
+9. **Test and iterate** → Open the HTML file in a browser and refine as needed
+
+### CLI Usage
 1. **Start the application** → Run `python main.py`
 2. **Enter project description** → Describe what you want to build in natural language
 3. **Watch the agents work** → AI agents plan, architect, and code your project in sequence
@@ -219,6 +267,19 @@ GROQ_MODEL_NAME=openai/gpt-oss-120b  # Default model (configurable)
 # set_verbose(True) - Verbose operation logging
 ```
 
+### Server Configuration
+The FastAPI server runs on `http://127.0.0.1:8000` by default. You can modify this in `server.py`:
+```python
+uvicorn.run(app, host="127.0.0.1", port=8000)
+```
+
+**Key API Endpoints:**
+- `POST /generate` - Generate a new project from a prompt
+- `GET /history` - Retrieve list of all generated projects with metadata
+- `POST /open-folder` - Open a project folder in the system file explorer
+- `GET /projects/{path}` - Serve static files from generated projects
+- `GET /static/{path}` - Serve web interface files (HTML/CSS/JS)
+
 ### Model Configuration
 The system uses Groq's high-performance models. Default configuration in `agent/graph.py`:
 ```python
@@ -258,6 +319,26 @@ project_path = f"projects/{project_name}_{timestamp}"
 
 ### Common Issues & Solutions
 
+#### Web Interface Issues
+```bash
+# Error: Blank page or "Cannot GET /"
+Solution: Make sure to access the correct URL
+http://127.0.0.1:8000/static/index.html
+
+# Error: "Failed to fetch" or API connection error
+Solution: Ensure the server is running
+python server.py
+# Then verify at: http://127.0.0.1:8000
+
+# Error: Projects not appearing in gallery
+Solution: Check if projects/ directory exists and contains folders
+# Refresh the page or restart the server
+
+# Error: "Open Folder" button not working
+Solution: This feature only works when running locally
+# Ensure proper file system permissions on Windows/Mac/Linux
+```
+
 #### API Connection Errors
 ```bash
 # Error: "GROQ_API_KEY not found"
@@ -290,19 +371,24 @@ python main.py --recursion-limit 200
 
 #### Dependencies & Installation
 ```bash
-# Error: "Module not found: langchain/langgraph/etc"
+# Error: "Module not found: langchain/langgraph/fastapi/etc"
 Solution: Install all dependencies
-pip install -r requirements.txt
-# Or if using uv
+# Using uv (recommended)
 uv sync
+# Or manually with pip
+pip install fastapi uvicorn groq langchain langchain-core langchain-groq langgraph pydantic python-dotenv
 
 # Error: "Python version compatibility"
 Solution: Upgrade to Python 3.11+
 python --version  # Should be 3.11.0 or higher
 
-# Error: ImportError for groq
-Solution: Install langchain-groq
-pip install langchain-groq>=0.3.7
+# Error: ImportError for groq or fastapi
+Solution: Install missing packages
+pip install langchain-groq>=0.3.7 fastapi>=0.122.0 uvicorn>=0.38.0
+
+# Error: "Address already in use" when starting server
+Solution: Port 8000 is already occupied
+# Either kill the existing process or change the port in server.py
 ```
 
 #### Project Generation Issues
@@ -345,12 +431,17 @@ Solution:
 
 ## 🔮 Future Enhancements
 
+- [x] **Web Interface** - ✅ Browser-based project generation with modern GUI (Completed)
+- [x] **Project History** - ✅ Gallery view of all generated projects (Completed)
+- [ ] **Live Preview** - In-browser preview of generated projects without downloading
 - [ ] **Multiple Tech Stacks** - Support for React/TypeScript, Vue, Python Flask/Django, Node.js
 - [ ] **Template System** - Pre-built project templates (SPA, API, Full-stack)
-- [ ] **README Generation** - Auto-generated project documentation 
-- [ ] **Web Interface** - Browser-based project generation with live preview
+- [ ] **README Generation** - Auto-generated project documentation
 - [ ] **Multi-Model Support** - Fallback to different models (OpenAI, Anthropic, local LLMs)
 - [ ] **Incremental Updates** - Modify existing projects instead of regenerating
+- [ ] **Project Export** - Download projects as ZIP files
+- [ ] **Dark Mode** - Theme toggle for the web interface
+- [ ] **Project Sharing** - Share generated projects via unique links
 
 ## 🤝 Contributing
 
@@ -380,14 +471,18 @@ cd CodeCompanion
 uv sync
 
 # Or install manually with pip
-pip install groq>=0.31.0 langchain>=0.3.27 langchain-core>=0.3.72 langchain-groq>=0.3.7 langgraph>=0.6.3 pydantic>=2.11.7 python-dotenv>=1.1.1
+pip install fastapi>=0.122.0 uvicorn>=0.38.0 groq>=0.31.0 langchain>=0.3.27 langchain-core>=0.3.72 langchain-groq>=0.3.7 langgraph>=0.6.3 pydantic>=2.11.7 python-dotenv>=1.1.1
 
 # Set up environment
 # Create .env file manually
 echo "GROQ_API_KEY=your_groq_api_key_here" > .env
 # Or edit .env in your text editor to add: GROQ_API_KEY=your_key_here
 
-# Run the application
+# Run the web server (recommended)
+python server.py
+# Then open: http://127.0.0.1:8000/static/index.html
+
+# Or run the CLI version
 python main.py
 ```
 
@@ -419,25 +514,30 @@ This project is open source and available under the MIT License.
 
 - **Project Name**: coder-buddy (internal), CodeCompanion (public)
 - **Language**: Python 3.11+
-- **Core Dependencies**: 8 packages (LangChain, LangGraph, Groq, Pydantic)
-- **Architecture**: Multi-agent state machine with LangGraph
-- **Lines of Code**: ~450 LOC (agent logic + tools + prompts)
+- **Core Dependencies**: 10 packages (FastAPI, Uvicorn, LangChain, LangGraph, Groq, Pydantic)
+- **Architecture**: Multi-agent state machine with LangGraph + FastAPI REST API
+- **Lines of Code**: ~600 LOC (agent logic + tools + prompts + server + frontend)
 - **Code Quality**: Fully type-hinted with Pydantic models
 - **Agent Count**: 4 specialized nodes (Planner, Workspace Creator, Architect, Coder)
 - **Tool Count**: 5 file system tools (write_file, read_file, list_files, get_current_directory, run_cmd)
+- **API Endpoints**: 5 REST endpoints (generate, history, open-folder, projects, static)
+- **Interface Options**: 2 modes (Web GUI + CLI)
 - **Maintenance**: Actively maintained and improved
 - **Package Manager**: uv (modern Python package manager)
 - **Learning Level**: Intermediate to Advanced Python + AI concepts
-- **Generated Projects**: 5 example projects included
+- **Generated Projects**: 6 example projects included
 
 ## 💡 Use Cases
 
-- **Rapid Prototyping**: Generate working prototypes in seconds
+- **Rapid Prototyping**: Generate working prototypes in seconds via web interface
 - **Learning Tool**: Study generated code to learn web development patterns
 - **Starter Templates**: Bootstrap new projects with AI-generated structure
 - **Code Examples**: Get instant examples for specific features
-- **Teaching Aid**: Demonstrate project structure and best practices
+- **Teaching Aid**: Demonstrate project structure and best practices with the visual GUI
 - **Hackathons**: Quickly scaffold projects during time-constrained events
+- **Portfolio Building**: Generate multiple project examples to showcase skills
+- **Client Demos**: Create quick prototypes to show potential clients
+- **Educational Workshops**: Use the gallery feature to show progression of projects
 
 ---
 

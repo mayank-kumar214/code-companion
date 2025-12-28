@@ -1,0 +1,90 @@
+:root {
+  /* Primary colors */
+  --primary-color: #4caf50;   /* green */
+  --secondary-color: #ff5722; /* orange */
+  --secondary-color-dark: #e64a19; /* darker orange for hover */
+
+  /* Backgrounds */
+  --bg-color: #f0f0f0;       /* light gray */
+  --canvas-bg: #ffffff;      /* white */
+
+  /* Fonts */
+  --font-sans: 'Arial', sans-serif;
+}
+
+/* Global reset and layout */
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  background-color: var(--bg-color);
+}
+
+/* Header */
+.game-header {
+  text-align: center;
+  margin: 20px 0;
+}
+
+/* Main game container */
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Canvas styling */
+.game-canvas {
+  border: 2px solid var(--primary-color);
+  background-color: var(--canvas-bg);
+  width: 100%;
+  max-width: 600px;
+  aspect-ratio: 1 / 1; /* keep square */
+}
+
+/* UI panel (score) */
+.ui-panel {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 600px;
+  margin-top: 10px;
+  font-size: 1.2rem;
+}
+
+/* Restart button */
+.restart-button {
+  padding: 10px 20px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--secondary-color);
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.restart-button:hover {
+  background-color: var(--secondary-color-dark);
+}
+
+/* Media queries for small screens */
+@media (max-width: 480px) {
+  .game-canvas {
+    max-width: 90vw;
+  }
+
+  .ui-panel {
+    font-size: 1rem;
+  }
+
+  .restart-button {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+}
