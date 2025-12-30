@@ -12,39 +12,74 @@
     <div class="main-container">
         <header>
             <div class="brand">
-                <i class="fa-solid fa-robot"></i> CodeCompanion
+                <i class="fa-brands fa-bilibili"></i> CodeCompanion
             </div>
         </header>
 
         <section class="hero-section">
             <h1>What shall we build?</h1>
             <div class="input-wrapper">
-                <textarea id="promptInput" placeholder="Describe your app..."></textarea>
+                <textarea id="promptInput" placeholder="Describe your app (e.g., 'create a modern todo app using HTML, CSS and JavaScript')..."></textarea>
                 <div class="input-actions">
                     <button id="generateBtn" onclick="generateProject()">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i> Generate
+                        Build<i class="fa-solid fa-left-long"></i>
                     </button>
                 </div>
             </div>
 
-            <div id="loader" class="hidden">
-                <span class="spinner"></span>
-                <span id="btnText">Architecting your solution...</span>
+            <div id="statusContainer" class="status-container hidden">
+                <div class="status-header">
+                    <span class="spinner-small"></span>
+                    <span id="statusPhase" class="status-text">Initializing...</span>
+                </div>
+                <div id="statusDetails" class="status-details">Waiting for agent...</div>
+                <div class="progress-track">
+                    <div id="progressBar" class="progress-fill"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="liveProjectArea" class="live-area hidden">
+            <div class="live-header">
+                <h2 id="liveProjectName">Generated Project</h2>
+                <div class="view-toggles">
+                    <button id="btnViewPreview" class="toggle-btn active" onclick="switchView('preview')">
+                        <i class="fa-solid fa-desktop"></i> Preview
+                    </button>
+                    <button id="btnViewCode" class="toggle-btn" onclick="switchView('code')">
+                        <i class="fa-solid fa-code"></i> Code
+                    </button>
+
+                    <button class="icon-btn" onclick="refreshPreview()" title="Reload Preview"><i class="fa-solid fa-rotate-right"></i></button>
+                    <button class="icon-btn" onclick="window.open(document.getElementById('previewFrame').src, '_blank')" title="Open in New Tab"><i class="fa-solid fa-external-link-alt"></i></button>
+
+                    <button class="icon-btn" onclick="closeProject()" title="Close Preview" style="color: #ef4444;">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
             </div>
 
-            <div id="errorArea" class="hidden">
-                <p id="errorMessage"></p>
+            <div class="live-content">
+                <div id="viewPreview" class="view-pane">
+                    <iframe id="previewFrame" class="full-frame"></iframe>
+                </div>
+
+                <div id="viewCode" class="view-pane hidden code-pane">
+                    <div class="file-explorer" id="codeTabs">
+                        </div>
+                    <div class="code-editor">
+                        <pre><code id="codeContent">Select a file...</code></pre>
+                    </div>
+                </div>
             </div>
         </section>
 
         <section class="gallery-section">
             <div class="gallery-header">
-                <h2>Generated Projects</h2>
+                <h2>Project History</h2>
             </div>
-
             <div class="cards-container" id="projectCards">
-                <div class="loading-card">Loading projects...</div>
-            </div>
+                </div>
         </section>
     </div>
 

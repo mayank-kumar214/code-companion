@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <header id="calc-header">
+        <h1>Calculator</h1>
+    </header>
+
+    <main id="calc-main" class="calculator">
+        <div id="display" class="calc-display" aria-live="polite" role="textbox" aria-label="Calculator display"></div>
+        <section id="buttons" class="calc-buttons">
+            <!-- Number buttons (0-9 and decimal point) -->
+            <button type="button" class="btn-number" aria-label="Zero">0</button>
+            <button type="button" class="btn-number" aria-label="One">1</button>
+            <button type="button" class="btn-number" aria-label="Two">2</button>
+            <button type="button" class="btn-number" aria-label="Three">3</button>
+            <button type="button" class="btn-number" aria-label="Four">4</button>
+            <button type="button" class="btn-number" aria-label="Five">5</button>
+            <button type="button" class="btn-number" aria-label="Six">6</button>
+            <button type="button" class="btn-number" aria-label="Seven">7</button>
+            <button type="button" class="btn-number" aria-label="Eight">8</button>
+            <button type="button" class="btn-number" aria-label="Nine">9</button>
+            <button type="button" class="btn-number" aria-label="Decimal point">.</button>
+
+            <!-- Operator buttons -->
+            <button type="button" class="btn-operator" aria-label="Add">+</button>
+            <button type="button" class="btn-operator" aria-label="Subtract">-</button>
+            <button type="button" class="btn-operator" aria-label="Multiply">*</button>
+            <button type="button" class="btn-operator" aria-label="Divide">/</button>
+
+            <!-- Function buttons -->
+            <button type="button" class="btn-clear" aria-label="Clear all">C</button>
+            <button type="button" class="btn-delete" aria-label="Delete last entry">⌫</button>
+            <button type="button" class="btn-equals" aria-label="Equals">=</button>
+        </section>
+    </main>
+
+    <aside id="history" class="calc-history">
+        <h2>History</h2>
+        <ul id="history-list"></ul>
+        <button id="clear-history" class="btn-clear-history" aria-label="Clear history">Clear History</button>
+    </aside>
+</body>
+</html>

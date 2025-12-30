@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic‑Tac‑Toe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <header id="header">
+        <h1>Tic‑Tac‑Toe</h1>
+    </header>
+
+    <section id="score-board" class="score">
+        <div id="player-x-score" class="player-score">
+            X: <span class="score-value" id="x-score-value">0</span>
+        </div>
+        <div id="player-o-score" class="player-score">
+            O: <span class="score-value" id="o-score-value">0</span>
+        </div>
+    </section>
+
+    <main id="game-container" class="board-container">
+        <div id="game-board" class="board" role="grid" aria-label="Tic Tac Toe board">
+            <!-- 9 cells -->
+            <button class="cell" data-index="0" aria-label="Cell 1" role="gridcell"></button>
+            <button class="cell" data-index="1" aria-label="Cell 2" role="gridcell"></button>
+            <button class="cell" data-index="2" aria-label="Cell 3" role="gridcell"></button>
+            <button class="cell" data-index="3" aria-label="Cell 4" role="gridcell"></button>
+            <button class="cell" data-index="4" aria-label="Cell 5" role="gridcell"></button>
+            <button class="cell" data-index="5" aria-label="Cell 6" role="gridcell"></button>
+            <button class="cell" data-index="6" aria-label="Cell 7" role="gridcell"></button>
+            <button class="cell" data-index="7" aria-label="Cell 8" role="gridcell"></button>
+            <button class="cell" data-index="8" aria-label="Cell 9" role="gridcell"></button>
+        </div>
+        <div id="turn-indicator" class="turn">
+            Turn: <span id="current-turn">X</span>
+        </div>
+    </main>
+
+    <section id="controls" class="controls">
+        <button id="reset-btn" class="control-btn" type="button">Reset</button>
+        <button id="new-game-btn" class="control-btn" type="button">New Game</button>
+    </section>
+
+    <footer id="footer">
+        <p>© 2025 Tic‑Tac‑Toe by OpenAI</p>
+    </footer>
+</body>
+</html>

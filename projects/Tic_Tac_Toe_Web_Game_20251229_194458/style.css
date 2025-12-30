@@ -1,0 +1,238 @@
+/* style.css – Modern, responsive Tic‑Tac‑Toe UI */
+
+/* ---------------------------------------------------------------
+   CSS Variables – easy theming & responsive sizing
+   --------------------------------------------------------------- */
+:root {
+  /* Core palette */
+  --bg-color: #f5f7fa;            /* page background */
+  --primary-color: #ffffff;      /* default cell background */
+  --accent-color: #ffb74d;        /* highlight / winning cells */
+  --x-color: #ff8a80;            /* X player cell */
+  --o-color: #90caf9;            /* O player cell */
+  --font-family: 'Inter', sans-serif;
+
+  /* Sizing – will be overridden on small screens */
+  --cell-size: 100px;            /* default cell width/height */
+}
+
+/* ---------------------------------------------------------------
+   Global reset & base styles
+   --------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+h1 {
+  font-weight: 600;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ---------------------------------------------------------------
+   Layout – header, footer, main container
+   --------------------------------------------------------------- */
+#header {
+  text-align: center;
+}
+
+#footer {
+  margin-top: auto;
+  font-size: 0.9rem;
+  color: #777;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------
+   Score board
+   --------------------------------------------------------------- */
+#score-board {
+  display: flex;
+  gap: 2rem;
+  font-size: 1.2rem;
+}
+
+.player-score {
+  font-weight: 600;
+}
+
+/* ---------------------------------------------------------------
+   Game container – flexbox centering of the board
+   --------------------------------------------------------------- */
+#game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* ---------------------------------------------------------------
+   Board – CSS Grid using the cell‑size variable
+   --------------------------------------------------------------- */
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, var(--cell-size));
+  gap: 0.5rem;
+}
+
+/* ---------------------------------------------------------------
+   Cell – square button, no default border, high‑contrast text
+   --------------------------------------------------------------- */
+.cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  background: var(--primary-color);
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 3rem;
+  font-weight: 600;
+  color: transparent; /* hide text, we use ::after */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, transform 0.1s ease;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cell:hover {
+  background: #e8f0fe;
+}
+
+.cell:active {
+  transform: scale(0.95);
+}
+
+.cell:focus {
+  outline: 3px solid #4a90e2;
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------
+   Player symbols – displayed via ::after based on data-player
+   --------------------------------------------------------------- */
+.cell[data-player="X"] {
+  background: var(--x-color);
+  color: #fff;
+}
+
+.cell[data-player="O"] {
+  background: var(--o-color);
+  color: #fff;
+}
+
+.cell[data-player]::after {
+  content: attr(data-player);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------------------------------------------------------------
+   Highlight – winning line animation
+   --------------------------------------------------------------- */
+.highlight {
+  background: var(--accent-color) !important;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 183, 77, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 183, 77, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 183, 77, 0); }
+}
+
+/* ---------------------------------------------------------------
+   Turn indicator – subtle fade‑in on change
+   --------------------------------------------------------------- */
+#turn-indicator {
+  font-size: 1.2rem;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ---------------------------------------------------------------
+   Controls – button styling
+   --------------------------------------------------------------- */
+.controls {
+  display: flex;
+  gap: 1rem;
+}
+
+.control-btn {
+  background: #4a90e2;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.control-btn:hover {
+  background: #357ab8;
+}
+
+.control-btn:active {
+  transform: scale(0.97);
+}
+
+.control-btn:focus {
+  outline: 3px solid #2c5d8a;
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------
+   Responsive adjustments – shrink cells on smaller viewports
+   --------------------------------------------------------------- */
+@media (max-width: 600px) {
+  :root {
+    --cell-size: 70px;
+  }
+}
+
+@media (max-width: 400px) {
+  :root {
+    --cell-size: 55px;
+  }
+  .cell {
+    font-size: 2.5rem;
+  }
+}
+
+/* ---------------------------------------------------------------
+   Reduced‑motion preference – disable animations & transitions
+   --------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
