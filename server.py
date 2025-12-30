@@ -10,7 +10,6 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from fastapi.responses import StreamingResponse, RedirectResponse
 
-# Ensure agent import works
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 try:
@@ -21,7 +20,6 @@ except ImportError as e:
 
 app = FastAPI(title="CodeCompanion GUI")
 
-# --- ROOT REDIRECT (This fixes the "Not Found" error at http://127.0.0.1:8000/) ---
 @app.get("/")
 async def root():
     return RedirectResponse(url="/static/index.html")
@@ -53,27 +51,20 @@ class ProjectRequest(BaseModel):
     recursion_limit: int = 100
 
 
-# --- STREAMING ENDPOINT ---
 @app.post("/generate-stream")
 async def generate_stream(request: ProjectRequest):
-    """
-    Streams events from the LangGraph agent to the frontend.
-    Yields JSON chunks: { "status": "...", "data": ... }
-    """
+    """Streams events from the LangGraph agent to the frontend."""
 
     async def event_generator():
         try:
-            # agent.stream yields events as the graph progresses through nodes
             inputs = {"user_prompt": request.prompt}
             config = {"recursion_limit": request.recursion_limit}
 
             project_path = None
             final_plan = None
 
-            # Stream the graph execution
             for event in agent.stream(inputs, config):
 
-                # 1. PLANNER NODE
                 if "planner" in event:
                     final_plan = event["planner"]["plan"]
                     yield json.dumps({
@@ -82,7 +73,6 @@ async def generate_stream(request: ProjectRequest):
                         "details": f"Planned: {final_plan.name}"
                     }) + "\n"
 
-                # 2. WORKSPACE NODE
                 elif "create_project_workspace" in event:
                     project_path = event["create_project_workspace"]["project_path"]
                     yield json.dumps({
@@ -91,7 +81,6 @@ async def generate_stream(request: ProjectRequest):
                         "details": f"Dir: {os.path.basename(project_path)}"
                     }) + "\n"
 
-                # 3. ARCHITECT NODE
                 elif "architect" in event:
                     yield json.dumps({
                         "phase": "architect",
@@ -99,7 +88,6 @@ async def generate_stream(request: ProjectRequest):
                         "details": "Breaking down tasks..."
                     }) + "\n"
 
-                # 4. CODER NODE (Loops)
                 elif "coder" in event:
                     coder_state = event["coder"].get("coder_state")
                     if coder_state:
@@ -111,7 +99,6 @@ async def generate_stream(request: ProjectRequest):
                             "details": f"Task: {coder_state.task_plan.implementation_steps[current - 1].filepath}"
                         }) + "\n"
 
-            # 5. DONE
             yield json.dumps({
                 "phase": "complete",
                 "message": "Project ready!",
@@ -126,7 +113,6 @@ async def generate_stream(request: ProjectRequest):
     return StreamingResponse(event_generator(), media_type="application/x-ndjson")
 
 
-# --- FILE EXPLORER ENDPOINT ---
 @app.get("/project-files")
 async def get_project_files(folder: str):
     """Returns a list of files and their content for the code viewer."""
@@ -136,10 +122,8 @@ async def get_project_files(folder: str):
 
     files_data = []
 
-    # Walk through the directory
     for root, _, files in os.walk(project_root):
         for file in files:
-            # Skip hidden files or images/binaries for now
             if file.startswith('.') or file.endswith(('.png', '.jpg', '.jpeg', '.ico')):
                 continue
 
@@ -154,10 +138,10 @@ async def get_project_files(folder: str):
                     "name": file,
                     "path": rel_path,
                     "content": content,
-                    "language": file.split('.')[-1]  # simple extension check
+                    "language": file.split('.')[-1]
                 })
             except Exception:
-                pass  # Skip files we can't read text from
+                pass
 
     return files_data
 

@@ -16,19 +16,15 @@ from agent.tools import write_file, read_file, get_current_directory, list_files
 
 _ = load_dotenv()
 
-# Optional: Disable debug logs in production for cleaner output
 set_debug(True)
 set_verbose(True)
 
-# Initialize LLM
 model_name = os.environ.get("GROQ_MODEL_NAME", "openai/gpt-oss-120b")
 llm = ChatGroq(model=model_name)
 
 
 def planner_agent(state: GraphState) -> dict:
-    """
-    1. PLANNER: Takes the user prompt and creates a high-level JSON plan.
-    """
+    """Takes the user prompt and creates a high-level JSON plan."""
     user_prompt = state.user_prompt
     print(f"--- PLANNER: Processing '{user_prompt}' ---")
 
@@ -36,7 +32,6 @@ def planner_agent(state: GraphState) -> dict:
     response_text = response.content
 
     try:
-        # Extract JSON from potential markdown code blocks
         if "```json" in response_text:
             response_text = response_text.split("```json")[1].split("```")[0].strip()
         elif "```" in response_text:
@@ -54,11 +49,8 @@ def planner_agent(state: GraphState) -> dict:
 
 
 def create_project_workspace(state: GraphState) -> dict:
-    """
-    2. WORKSPACE: Creates the physical folder on disk.
-    """
+    """Creates the physical folder on disk for the project."""
     project_name = state.plan.name.strip().replace(" ", "_")
-    # Sanitize project name
     project_name = re.sub(r'[^a-zA-Z0-9_]', '', project_name)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -73,9 +65,7 @@ def create_project_workspace(state: GraphState) -> dict:
 
 
 def architect_agent(state: GraphState) -> dict:
-    """
-    3. ARCHITECT: Takes the plan and breaks it down into specific file implementation tasks.
-    """
+    """Takes the plan and breaks it down into specific file implementation tasks."""
     plan: Plan = state.plan
     print(f"--- ARCHITECT: Designing file structure for {plan.name} ---")
 
@@ -100,18 +90,14 @@ def architect_agent(state: GraphState) -> dict:
 
 
 def coder_agent(state: GraphState) -> dict:
-    """
-    4. CODER: Iteratively implements each file in the TaskPlan.
-    """
+    """Iteratively implements each file in the TaskPlan."""
     coder_state: CoderState = state.coder_state
 
-    # Initialize CoderState if it's the first loop
     if coder_state is None:
         coder_state = CoderState(task_plan=state.task_plan, current_step_idx=0)
 
     steps = coder_state.task_plan.implementation_steps
 
-    # Check if we are done
     if coder_state.current_step_idx >= len(steps):
         print("--- CODER: All tasks completed. ---")
         return {"coder_state": coder_state, "status": "DONE"}
@@ -172,17 +158,12 @@ def coder_agent(state: GraphState) -> dict:
         })
     except Exception as e:
         print(f"--- CODER ERROR on {current_task.filepath}: {e} ---")
-        # We continue to the next step even if one fails, to avoid infinite loops
         pass
 
-    # Increment step for the NEXT loop
     coder_state.current_step_idx += 1
 
-    # Return updated state. Status is NOT 'DONE' yet unless we hit the limit next time.
     return {"coder_state": coder_state, "status": "IN_PROGRESS"}
 
-
-# --- GRAPH CONSTRUCTION ---
 
 graph = StateGraph(GraphState)
 
@@ -191,12 +172,10 @@ graph.add_node("create_project_workspace", create_project_workspace)
 graph.add_node("architect", architect_agent)
 graph.add_node("coder", coder_agent)
 
-# Linear flow for setup
 graph.add_edge("planner", "create_project_workspace")
 graph.add_edge("create_project_workspace", "architect")
 graph.add_edge("architect", "coder")
 
-# Loop for coding
 graph.add_conditional_edges(
     "coder",
     lambda s: "END" if s.status == "DONE" else "coder",

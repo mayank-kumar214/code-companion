@@ -1,14 +1,11 @@
 document.addEventListener('DOMContentLoaded', loadHistory);
 
-// --- GLOBAL STATE ---
 let currentProjectFolder = null;
 
-// --- GENERATION LOGIC ---
 async function generateProject() {
     const promptInput = document.getElementById('promptInput');
     const generateBtn = document.getElementById('generateBtn');
 
-    // Status Elements
     const statusContainer = document.getElementById('statusContainer');
     const statusPhase = document.getElementById('statusPhase');
     const statusDetails = document.getElementById('statusDetails');
@@ -17,10 +14,9 @@ async function generateProject() {
     const prompt = promptInput.value.trim();
     if (!prompt) return alert("Please enter a description");
 
-    // Reset UI
     generateBtn.disabled = true;
     statusContainer.classList.remove('hidden');
-    document.getElementById('liveProjectArea').classList.add('hidden'); // Hide previous result
+    document.getElementById('liveProjectArea').classList.add('hidden');
     progressBar.style.width = '5%';
 
     try {
@@ -46,14 +42,12 @@ async function generateProject() {
                 try {
                     const data = JSON.parse(line);
 
-                    // Update Status UI
-                    if(data.phase !== 'error') {
+                    if (data.phase !== 'error') {
                         statusPhase.textContent = data.message;
-                        if(data.details) statusDetails.textContent = data.details;
+                        if (data.details) statusDetails.textContent = data.details;
                     }
 
-                    // Handle Phases
-                    switch(data.phase) {
+                    switch (data.phase) {
                         case 'planning':
                             progressBar.style.width = '25%';
                             break;
@@ -91,14 +85,10 @@ async function generateProject() {
 
 async function handleGenerationComplete(data) {
     const rawPath = data.project_path;
-    // Extract folder name from path
     currentProjectFolder = rawPath.replace(/[/\\]$/, '').split(/[/\\]/).pop();
 
-    // 1. Refresh History
     await loadHistory();
 
-    // 2. Load Project in Live View
-    // Create a mock object so we can reuse the activate logic
     const projMock = {
         name: data.project_name,
         folder: currentProjectFolder
@@ -109,7 +99,6 @@ async function handleGenerationComplete(data) {
 function refreshPreview() {
     const frame = document.getElementById('previewFrame');
     if (!currentProjectFolder) return;
-    // Add random query param to force reload
     frame.src = `/projects/${currentProjectFolder}/index.html?t=${new Date().getTime()}`;
 }
 
@@ -127,11 +116,9 @@ async function loadProjectFiles(folder) {
         return;
     }
 
-    // Sort files: HTML first, then CSS, JS, then others
     const priority = { 'html': 1, 'css': 2, 'js': 3 };
     files.sort((a, b) => (priority[a.language] || 99) - (priority[b.language] || 99));
 
-    // Create Tabs
     files.forEach((file, index) => {
         const tab = document.createElement('button');
         tab.className = `tab-btn ${index === 0 ? 'active' : ''}`;
@@ -144,11 +131,9 @@ async function loadProjectFiles(folder) {
         tabsContainer.appendChild(tab);
     });
 
-    // Set initial content
     codeContent.textContent = files[0].content;
 }
 
-// --- TAB SWITCHING (Preview vs Code) ---
 function switchView(view) {
     const previewContainer = document.getElementById('viewPreview');
     const codeContainer = document.getElementById('viewCode');
@@ -168,17 +153,14 @@ function switchView(view) {
     }
 }
 
-// --- CLOSE PROJECT ---
 function closeProject() {
     const liveArea = document.getElementById('liveProjectArea');
     liveArea.classList.add('hidden');
 
-    // Optional: Reset iframe to stop audio/video
     document.getElementById('previewFrame').src = '';
     currentProjectFolder = null;
 }
 
-// --- HISTORY LOGIC ---
 async function loadHistory() {
     const container = document.getElementById('projectCards');
     try {
@@ -220,20 +202,17 @@ async function loadHistory() {
                 </div>
             `;
 
-            // 1. Click on the whole card loads the project (standard behavior)
             card.onclick = () => activateProject(proj);
 
-            // 2. Click on "Edit/Preview" button
             const loadBtn = card.querySelector('.btn-load');
             loadBtn.onclick = (e) => {
-                e.stopPropagation(); // Prevent double-firing
+                e.stopPropagation();
                 activateProject(proj);
             };
 
-            // 3. Click on "New Tab" button
             const newTabBtn = card.querySelector('.btn-newtab');
             newTabBtn.onclick = (e) => {
-                e.stopPropagation(); // Prevents the page from scrolling up to the editor
+                e.stopPropagation();
             };
 
             container.appendChild(card);
@@ -243,7 +222,6 @@ async function loadHistory() {
     }
 }
 
-// Helper: Loads project into the main view
 function activateProject(proj) {
     currentProjectFolder = proj.folder;
     document.getElementById('liveProjectName').textContent = proj.name;
@@ -254,6 +232,5 @@ function activateProject(proj) {
     refreshPreview();
     loadProjectFiles(proj.folder);
 
-    // Scroll specifically to the Live Area (with top margin)
     liveArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
